@@ -1,0 +1,7 @@
+progrium/consul,latest
+progrium/registrator,latest
+prom/prometheus,latest
+prom/container-exporter,latest
+prom/consul-exporter, latest
+prom/alertmanager,latest
+prom/promdash,latest
