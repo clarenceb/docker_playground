@@ -39,7 +39,7 @@ docker run -d \
   -v ${prometheus_rules_path}/${prometheus_rules_file}:/${prometheus_rules_file} \
   prom/prometheus \
   -config.file=/${prometheus_config_file} \
-  -alertmanager.url=http://${PUBLIC_IP}:9093
+  -alertmanager.url=http://${public_ip}:9093
 
 # Start the Docker container metrics exporter (for Prometheus server to scrape)
 docker run -d \
@@ -54,7 +54,7 @@ docker run -d \
    --name consul_exporter \
    -p ${consul_exporter_port}:${consul_exporter_port} \
    prom/consul-exporter \
-   --consul.server="${PUBLIC_IP}:${consul_server_port}"
+   --consul.server="${public_ip}:${consul_server_port}"
 
 # Create Prometheus Dashboard database (using a file-based sqlite3 DB)
 docker run --rm \
