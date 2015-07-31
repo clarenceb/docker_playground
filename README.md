@@ -5,3 +5,5 @@ Introduction to Prometheus for monitoring container-based applications and servi
 
 Presentation material for [Infracoders August Meetup](http://www.meetup.com/Infrastructure-Coders/events/224196792/).
 
+Source code for shop-app, catalogue, review services not provided yet.
+
