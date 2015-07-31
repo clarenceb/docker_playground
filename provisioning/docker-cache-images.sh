@@ -14,7 +14,7 @@ fi
 
 echo "Running as: `whoami`"
 
-base_dir="/vagrant" 
+base_dir="/vagrant/provisioning"
 docker_cache_dir="${base_dir}/cache/docker"
 
 mkdir -p ${docker_cache_dir}
