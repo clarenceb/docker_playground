@@ -1,0 +1,59 @@
+# Alert for Review service being unreachable for >30 seconds.
+ALERT ReviewServiceDown
+  IF absent(consul_catalog_service_node_healthy{service="review-service-admin"}) == 1
+  FOR 30s
+  WITH {
+    severity="page"
+  }
+  SUMMARY "Review service {{$labels.instance}} down"
+  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been down for more than 30 seconds."
+
+# Alert for Review service being unhealthy
+ALERT ReviewServiceUnhealthy
+  IF consul_catalog_service_node_healthy{service="review-service-admin"} == 0
+  FOR 30s
+  WITH {
+    severity="page"
+  }
+  SUMMARY "Review service {{$labels.instance}} unhealthy"
+  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been unhealthy for more than 30 seconds."
+
+# Alert for Catalogue service being unreachable for >30 seconds.
+ALERT CatalogueServiceDown
+  IF absent(consul_catalog_service_node_healthy{service="catalogue-service-admin"}) == 1
+  FOR 30s
+  WITH {
+    severity="page"
+  }
+  SUMMARY "Catalogue service {{$labels.instance}} down"
+  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been down for more than 30 seconds."
+
+# Alert for Catalogue service being unhealthy
+ALERT CatalogueServiceUnhealthy
+  IF consul_catalog_service_node_healthy{service="catalogue-service-admin"} == 0
+  FOR 30s
+  WITH {
+    severity="page"
+  }
+  SUMMARY "Catalogue service {{$labels.instance}} unhealthy"
+  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been unhealthy for more than 30 seconds."
+
+# Alert for Shop app being unreachable for >30 seconds.
+ALERT ShopAppDown
+  IF absent(consul_catalog_service_node_healthy{service="shop-application-admin"}) == 1
+  FOR 30s
+  WITH {
+    severity="page"
+  }
+  SUMMARY "Shop app {{$labels.instance}} down"
+  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been down for more than 30 seconds."
+
+# Alert for Shop app being unhealthy
+ALERT ShopAppUnhealthy
+  IF consul_catalog_service_node_healthy{service="shop-application-admin"} == 0
+  FOR 30s
+  WITH {
+    severity="page"
+  }
+  SUMMARY "Shop app {{$labels.instance}} unhealthy"
+  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been unhealthy for more than 30 seconds."
