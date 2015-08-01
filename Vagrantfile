@@ -51,4 +51,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Load Docker images from local cache if available over fetching from Docker hub
   config.vm.provision "shell",  path: "provisioning/docker-cache-images.sh"
 
+  config.vm.provision "shell",  path: "provisioning/install-docker-compose.sh"
 end
