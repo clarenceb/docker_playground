@@ -43,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Update apt cache to latest
   config.vm.provision "shell",  inline: "apt-get update -y"
 
-  config.vm.provision "shell",  path: "provisioning/install_dependencies.sh"
+  config.vm.provision "shell",  path: "provisioning/install-dependencies.sh"
 
   # Install and configure docker
   config.vm.provision "docker"
