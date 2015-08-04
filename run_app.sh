@@ -4,7 +4,7 @@
 
 set -e
 
-./stop-app.sh
+./stop_app.sh
 
 docker run -d \
   -p 8082:8082 \
