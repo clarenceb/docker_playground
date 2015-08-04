@@ -1,10 +1,13 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-`mkdir -p cache/m2`
 
 def create_synced_dir(config, host_dir, vm_dir, owner = 'vagrant', group = 'vagrant')
-  config.vm.synced_folder host_dir, vm_dir, owner: owner, group: group if File.directory?(host_dir)
+  unless File.directory?(host_dir)
+    require 'fileutils'
+    FileUtils.mkdir_p(host_dir)
+  end
+  config.vm.synced_folder host_dir, vm_dir, owner: owner, group: group
 end
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
@@ -24,6 +27,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Cache Maven dependencies on host to save time when rebuilding VM.
   create_synced_dir(config, "cache/m2/", "/home/vagrant/.m2")
 
+  # Shop Application UI
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
   # Consul interface
   config.vm.network "forwarded_port", guest: 8500, host: 8500
   # Prometheus Server
