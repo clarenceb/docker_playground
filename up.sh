@@ -12,7 +12,7 @@ echo "UP - Start..."
 ./package.sh
 
 # Run the app and services
-./run-app.sh
+./run_app.sh
 
 # Set up cron job to clean up dead containers
 ./install_cron_job.sh
