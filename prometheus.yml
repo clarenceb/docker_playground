@@ -1,13 +1,20 @@
+### prometheus.yml ###
+
 global:
   scrape_interval: 15s
   scrape_timeout: 10s
   evaluation_interval: 15s
+
+  # Attach these extra labels to all time-series collected by this Prometheus instance.
   labels:
     monitor: demo_services
 
 rule_files:
 - /demo_services.rules
 
+# Define the endpoints to scrape metrics from.
+# The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+# Prometheus will automatically look for the /metrics endpoint on targets for exposed metrics.
 scrape_configs:
 
 - job_name: prometheus_server
@@ -15,7 +22,7 @@ scrape_configs:
   scrape_interval: 5s
   target_groups:
   - targets:
-    - 'localhost:9090'
+    - localhost:9090
 
 - job_name: container_exporter
   scheme: http

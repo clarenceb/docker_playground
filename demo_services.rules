@@ -1,3 +1,5 @@
+### demo_services.rules ###
+
 # Alert for Review service being unreachable for >30 seconds.
 ALERT ReviewServiceDown
   IF absent(consul_catalog_service_node_healthy{service="review-service-admin"}) == 1
