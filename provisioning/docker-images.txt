@@ -5,3 +5,5 @@ prom/container-exporter,latest
 prom/consul-exporter, latest
 prom/alertmanager,latest
 prom/promdash,latest
+swarm,0.3.0
+haproxy,1.5

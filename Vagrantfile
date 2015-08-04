@@ -22,28 +22,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.box = "ubuntu/trusty64"
-  config.vm.hostname = "promserver"
-
-  # Cache Maven dependencies on host to save time when rebuilding VM.
-  create_synced_dir(config, "cache/m2/", "/home/vagrant/.m2")
-
-  # Shop Application UI
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
-  # Consul interface
-  config.vm.network "forwarded_port", guest: 8500, host: 8500
-  # Prometheus Server
-  config.vm.network "forwarded_port", guest: 9090, host: 9090
-  # Prometheus Alert Manager
-  config.vm.network "forwarded_port", guest: 9093, host: 9093
-  # Prometheus Dashboard
-  config.vm.network "forwarded_port", guest: 3000, host: 3000
-
-  config.vm.network "private_network", ip: "192.168.33.10"
-
-  config.vm.provider "virtualbox" do |vb|
-     vb.customize ["modifyvm", :id, "--memory", "4096"]
-     vb.customize ["modifyvm", :id, "--cpus", "2"]
-  end
 
   # Update apt cache to latest
   config.vm.provision "shell",  inline: "apt-get update -y"
@@ -56,5 +34,41 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Load Docker images from local cache if available over fetching from Docker hub
   config.vm.provision "shell",  path: "provisioning/docker-cache-images.sh"
 
-  config.vm.provision "shell",  path: "provisioning/install-docker-compose.sh"
+  # Cache Maven dependencies on host to save time when rebuilding VM.
+  create_synced_dir(config, "provisioning/cache/m2/", "/home/vagrant/.m2")
+
+  config.vm.define "promserver", primary: true do |server|
+    server.vm.hostname = "promserver"
+
+    # Shop Application UI
+    server.vm.network "forwarded_port", guest: 8080, host: 8080
+    # Consul interface
+    server.vm.network "forwarded_port", guest: 8500, host: 8500
+    # Prometheus Server
+    server.vm.network "forwarded_port", guest: 9090, host: 9090
+    # Prometheus Alert Manager
+    server.vm.network "forwarded_port", guest: 9093, host: 9093
+    # Prometheus Dashboard
+    server.vm.network "forwarded_port", guest: 3000, host: 3000
+
+    server.vm.network "private_network", ip: "192.168.33.10"
+
+    server.vm.provider "virtualbox" do |vb|
+       vb.customize ["modifyvm", :id, "--memory", "4096"]
+       vb.customize ["modifyvm", :id, "--cpus", "2"]
+    end
+
+    config.vm.provision "shell",  path: "provisioning/install-docker-compose.sh"
+  end
+
+  config.vm.define "server02" do |server|
+    server.vm.hostname = "server02"
+
+    server.vm.network "private_network", ip: "192.168.33.11"
+
+    server.vm.provider "virtualbox" do |vb|
+       vb.customize ["modifyvm", :id, "--memory", "768"]
+       vb.customize ["modifyvm", :id, "--cpus", "1"]
+    end
+  end
 end
