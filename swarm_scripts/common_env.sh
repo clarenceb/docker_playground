@@ -1,0 +1,11 @@
+#!/bin/bash
+
+PUBLIC_IP=`ip addr show eth1 | grep inet | awk '{print $2}' | cut -d "/" -f 1 | head -n 1`
+DOCKER_TCP_PORT=2375
+CONSUL_API_PORT=8500
+SWARM_MANAGER_IP=192.168.33.10
+SWARM_MANAGER_PORT=8333
+CONSUL_URL="consul://${PUBLIC_IP}:${CONSUL_API_PORT}"
+
+export DOCKER_SWARM_HOST="tcp://${SWARM_MANAGER_IP}:${SWARM_MANAGER_PORT}"
+export DOCKER_HOST="tcp://${PUBLIC_IP}:${DOCKER_TCP_PORT}"

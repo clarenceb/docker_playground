@@ -1,7 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
 def create_synced_dir(config, host_dir, vm_dir, owner = 'vagrant', group = 'vagrant')
   unless File.directory?(host_dir)
     require 'fileutils'
@@ -30,9 +29,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Install and configure docker
   config.vm.provision "docker"
-
-  # Load Docker images from local cache if available over fetching from Docker hub
-  config.vm.provision "shell",  path: "provisioning/docker-cache-images.sh"
 
   # Cache Maven dependencies on host to save time when rebuilding VM.
   create_synced_dir(config, "provisioning/cache/m2/", "/home/vagrant/.m2")
