@@ -5,7 +5,7 @@ source ${basedir}/common_env.sh
 
 grep "tcp" /etc/default/docker
 if [[ $? != 0 ]]; then
-  echo "DOCKER_OPTS=\"-H tcp://${PUBLIC_IP}:${DOCKER_TCP_PORT} \${DOCKER_OPTS}\"" >> /etc/default/docker
+  echo "DOCKER_OPTS=\"-H tcp://${PUBLIC_IP}:${DOCKER_TCP_PORT} -H unix:///var/run/docker.sock \${DOCKER_OPTS}\"" >> /etc/default/docker
 fi
 
 netstat -tulnp | grep ${DOCKER_TCP_PORT} | grep docker

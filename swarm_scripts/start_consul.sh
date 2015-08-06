@@ -32,6 +32,7 @@ if [[ "${consul_type}" == "server" ]]; then
       -p ${docker_bridge_ip}:${consul_dns_port}:${consul_dns_port}/udp \
       -e "SERVICE_${consul_api_port}_NAME=consul-api" \
       -e "SERVICE_${consul_dns_port}_NAME=consul-dns" \
+      -e "DOCKER_HOST=${DOCKER_HOST}" \
       progrium/consul -server -advertise "${PUBLIC_IP}" -bootstrap-expect ${consul_nodes}
 else
   consul_server_ip=192.168.33.10
@@ -51,6 +52,7 @@ else
       -p ${docker_bridge_ip}:${consul_dns_port}:${consul_dns_port}/udp \
       -e "SERVICE_${consul_api_port}_NAME=consul-api" \
       -e "SERVICE_${consul_dns_port}_NAME=consul-dns" \
+      -e "DOCKER_HOST=${DOCKER_HOST}" \
       progrium/consul -server -advertise ${PUBLIC_IP} -join ${consul_server_ip}
 fi
 
