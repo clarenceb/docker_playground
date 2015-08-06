@@ -2,18 +2,17 @@
 #
 # Starts the monitoring infrastructure.
 
-cwd=`pwd`
-public_ip=`ip addr show eth1 | grep inet | awk '{print $2}' | cut -d "/" -f 1 | head -n 1`
+basedir=$(readlink -f $(dirname $0))
+source ${basedir}/swarm_scripts/common_env.sh
 
 prometheus_server_port=9090
-prometheus_config_path=${cwd}
+prometheus_config_path=${basedir}
 prometheus_config_file="prometheus.yml"
-prometheus_rules_path="${cwd}"
+prometheus_rules_path="${basedir}"
 prometheus_rules_file="demo_services.rules"
 alertmanager_config_file="/alertmanager/alertmanager.conf"
 alertmanager_silences_file="/alertmanager/silences.json"
 container_exporter_port=9104
-consul_server_port=8500
 consul_exporter_port=9107
 alertmanager_port=9093
 prometheus_dash_port=3000
@@ -42,58 +41,64 @@ prometheus_dash_port=3000
 #   -web.listen-address=":9093": Address to listen on for the web interface and API.
 #   -web.path-prefix="/": Prefix for all web paths.
 #   -web.use-local-assets=false: Serve assets and templates from local files instead of from the binary.
-docker run -d \
+docker -H ${DOCKER_SWARM_HOST} run -d \
   --name alertmanager \
   -p ${alertmanager_port}:${alertmanager_port} \
   --restart=on-failure:10 \
   -v ${prometheus_config_path}:/alertmanager \
+  -e "constraint:node==promserver" \
   prom/alertmanager \
   -config.file=${alertmanager_config_file} \
   -silences.file=${alertmanager_silences_file}
 
 # Start Prometheus server
-docker run -d \
+docker -H ${DOCKER_SWARM_HOST} run -d \
   --name prometheus_server \
   -h localhost \
   -p ${prometheus_server_port}:${prometheus_server_port} \
   -v ${prometheus_config_path}/${prometheus_config_file}:/${prometheus_config_file} \
   -v ${prometheus_rules_path}/${prometheus_rules_file}:/${prometheus_rules_file} \
+  -e "constraint:node==promserver" \
   prom/prometheus \
   -config.file=/${prometheus_config_file} \
-  -alertmanager.url=http://${public_ip}:${alertmanager_port}
+  -alertmanager.url=http://${PUBLIC_IP}:${alertmanager_port}
 
 # Start the Docker container metrics exporter (for Prometheus server to scrape)
-docker run -d \
+docker -H ${DOCKER_SWARM_HOST} run -d \
   --name container_exporter \
   -p ${container_exporter_port}:${container_exporter_port} \
   -v /sys/fs/cgroup:/cgroup \
   -v /var/run/docker.sock:/var/run/docker.sock \
+  -e "constraint:node==promserver" \
   prom/container-exporter
 
 # Start the Consul Exporter (for Prometheus server to scrape)
-docker run -d \
+docker -H ${DOCKER_SWARM_HOST} run -d \
    --name consul_exporter \
    -p ${consul_exporter_port}:${consul_exporter_port} \
+   -e "constraint:node==promserver" \
    prom/consul-exporter \
-   --consul.server="${public_ip}:${consul_server_port}"
+   --consul.server="${PUBLIC_IP}:${CONSUL_API_PORT}"
 
 # Create Prometheus Dashboard database (using a file-based sqlite3 DB)
-docker run --rm \
+docker -H ${DOCKER_SWARM_HOST} run --rm \
   -p ${prometheus_dash_port}:${prometheus_dash_port} \
   -v /tmp/prom:/tmp/prom \
   -e DATABASE_URL=sqlite3:/tmp/prom/file.sqlite3 \
+  -e "constraint:node==promserver" \
   prom/promdash \
   ./bin/rake db:migrate
 
 # Start Proemtheus Dashboard
-docker run -d \
+docker -H ${DOCKER_SWARM_HOST} run -d \
   --name prometheus_dash \
   -p ${prometheus_dash_port}:${prometheus_dash_port} \
   -v /tmp/prom:/tmp/prom \
   -e DATABASE_URL=sqlite3:/tmp/prom/file.sqlite3 \
+  -e "constraint:node==promserver" \
   prom/promdash
 
-echo ">>>> Public IP address of this machine: ${public_ip}"
-echo ">>>> Prometheus Server is accessible at: ${public_ip}:${prometheus_server_port}"
-echo ">>>> Prometheus Alert Manager is accessible at: ${public_ip}:${alertmanager_port}"
-echo ">>>> Prometheus Dashboard is accessible at: ${public_ip}:${prometheus_dash_port}"
+echo ">>>> Public IP address of this machine: ${PUBLIC_IP}"
+echo ">>>> Prometheus Server is accessible at: ${PUBLIC_IP}:${prometheus_server_port}"
+echo ">>>> Prometheus Alert Manager is accessible at: ${PUBLIC_IP}:${alertmanager_port}"
+echo ">>>> Prometheus Dashboard is accessible at: ${PUBLIC_IP}:${prometheus_dash_port}"
