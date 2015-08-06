@@ -3,7 +3,11 @@ Introduction to Prometheus for monitoring container-based applications and servi
 
 Presentation material for [Infracoders August Meetup](http://www.meetup.com/Infrastructure-Coders/events/224196792/).
 
-Source code for shop-app, catalogue, review services not provided yet.
+Note: Source code for shop-app, catalogue, review services not provided yet.
+
+This demo uses a Docker-based app and services.  The app + services use a combination of Registrator and Consul for Service Discovery.
+
+Prometheus is used to monitor the containers via health metrics exported from [consul_exporter](https://github.com/prometheus/consul_exporter).
 
 Steps to get app and services running in a Docker Swarm cluster:
 ----------------------------------------------------------------
@@ -87,9 +91,37 @@ View Prometheus Dashboard in your browser (open http://localhost:3000/ in a brow
 
 You need to build a custom dashboard - refer to: http://prometheus.io/docs/visualization/promdash/
 
+Misc
+----
+
+Look up healthy service instances for a service in Consul:
+
+Via HTTP:
+
+    # On promserver
+    curl -s http://192.168.33.10:8500/v1/catalog/service/review-service | json_pp
+
+Via DNS:
+
+    # On promserver
+    dig @172.17.42.1 review-service.service.consul. ANY
+    dig @172.17.42.1 review-service.service.consul. SRV
+
+View healthcheck for the shop-app:
+
+    # On promserver
+    curl http://192.168.33.10:8081/healthcheck?pretty=true
+
+**Note**: If you stop all instances of either review or catalogue service then the shop-app will report that it is unhealthy.
+
+
 Resources:
 ----------
 * [Monitoring Docker services with Prometheus](https://labs.ctl.io/monitoring-docker-services-with-prometheus/)
 * [Prometheus Documentation](http://prometheus.io/docs/introduction/overview/)
 * [PromDash](http://prometheus.io/docs/visualization/promdash/)
 * [Alertmanager](http://prometheus.io/docs/alerting/alertmanager/)
+* [Docker Swarm](https://docs.docker.com/swarm/)
+* [Registrator](https://github.com/gliderlabs/registrator)
+* [Consul](https://www.consul.io/)
+* [consul_exporter](https://github.com/prometheus/consul_exporter)
