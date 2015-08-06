@@ -21,6 +21,11 @@ echo "Starting Swarm Nodes"
 vagrant ssh promserver -c "sudo bash -c '${script_dir}/join_swarm_node.sh 1'"
 vagrant ssh server02 -c "sudo bash -c '${script_dir}/join_swarm_node.sh 2'"
 
+echo "Installing cleanup cron jobs"
+vagrant ssh promserver -c "sudo /vagrant/install_cron_job.sh"
+vagrant ssh server02 -c "sudo /vagrant/install_cron_job.sh"
+
 echo "Listing Swarm Nodes"
 vagrant ssh promserver -c "${script_dir}/list_swarm_nodes.sh"
+
 echo "Done."
