@@ -57,19 +57,39 @@ Run the app plus 4 x review and 4 x catalogue services (on random ephemeral port
 
 Verify the shop-app works (open http://localhost:8080/ in a browser on your host)
 
-    open http://localhost:8080/
-
 Verify Consul is showing the services correctly (open http://192.168.33.10:8500/ui/#/dc1/services in a browser on your host)
-
-    open http://192.168.33.10:8500/ui/#/dc1/services
 
 All should be green - healthy.
 
 Start Monitoring
 ----------------
 
-TODO
+Open a SSH terminal to `promserver` and source Docker environment
+
+    vagrant ssh promserver
+    cd /vagrant
+    source swarm_scripts/common_env.sh
+
+Start monitoring script:
+
+    ./start_monitoring.sh
+    exit
+
+View Prometheus server in your browser (open http://localhost:9090/ in a browser on your host)
+
+Click the **Alerts** tab to see current alert statuses.
+
+View Prometheus Alertmanager in your browser (open http://localhost:9093/ in a browser on your host)
+
+No alerts should be firing at the moment.
+
+View Prometheus Dashboard in your browser (open http://localhost:3000/ in a browser on your host)
+
+You need to build a custom dashboard - refer to: http://prometheus.io/docs/visualization/promdash/
 
 Resources:
 ----------
 * [Monitoring Docker services with Prometheus](https://labs.ctl.io/monitoring-docker-services-with-prometheus/)
+* [Prometheus Documentation](http://prometheus.io/docs/introduction/overview/)
+* [PromDash](http://prometheus.io/docs/visualization/promdash/)
+* [Alertmanager](http://prometheus.io/docs/alerting/alertmanager/)
