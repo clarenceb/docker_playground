@@ -2,8 +2,7 @@ progrium/consul,latest
 progrium/registrator,latest
 prom/prometheus,latest
 prom/container-exporter,latest
-prom/consul-exporter, latest
+clarenceb/consul_exporter,0.2.0
 prom/alertmanager,latest
 prom/promdash,latest
 swarm,0.3.0
-haproxy,1.5

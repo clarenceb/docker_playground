@@ -77,7 +77,7 @@ docker -H ${DOCKER_SWARM_HOST} run -d \
    --name consul_exporter \
    -p ${consul_exporter_port}:${consul_exporter_port} \
    -e "constraint:node==promserver" \
-   prom/consul-exporter \
+   clarenceb/consul_exporter:0.2.0 \
    --consul.server="${PUBLIC_IP}:${CONSUL_API_PORT}"
 
 # Create Prometheus Dashboard database (using a file-based sqlite3 DB)
