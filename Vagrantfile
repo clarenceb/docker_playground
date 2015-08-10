@@ -61,7 +61,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     server.vm.network "private_network", ip: "192.168.33.11"
 
     server.vm.provider "virtualbox" do |vb|
-       vb.customize ["modifyvm", :id, "--memory", "768"]
+       vb.customize ["modifyvm", :id, "--memory", "1024"]
        vb.customize ["modifyvm", :id, "--cpus", "1"]
     end
   end
