@@ -63,16 +63,28 @@ docker -H ${DOCKER_SWARM_HOST} run -d \
   -config.file=/${prometheus_config_file} \
   -alertmanager.url=http://${PUBLIC_IP}:${alertmanager_port}
 
-# Start the Docker container metrics exporter (for Prometheus server to scrape)
+# Start the Docker container metrics exporter (for Prometheus server to scrape) - promserver
+# Note: Due to the way this exporter works, you need one per Docker hosts to be running.
 docker -H ${DOCKER_SWARM_HOST} run -d \
-  --name container_exporter \
+  --name container_exporter_1 \
   -p ${container_exporter_port}:${container_exporter_port} \
   -v /sys/fs/cgroup:/cgroup \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e "constraint:node==promserver" \
   prom/container-exporter
 
+# Start the Docker container metrics exporter (for Prometheus server to scrape) - server02
+# Note: Due to the way this exporter works, you need one per Docker hosts to be running.
+docker -H ${DOCKER_SWARM_HOST} run -d \
+  --name container_exporter_2 \
+  -p ${container_exporter_port}:${container_exporter_port} \
+  -v /sys/fs/cgroup:/cgroup \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e "constraint:node==server02" \
+  prom/container-exporter
+
 # Start the Consul Exporter (for Prometheus server to scrape)
+# Note: Since Consul is running in a cluster only one Consul exporter needs to be running.
 docker -H ${DOCKER_SWARM_HOST} run -d \
    --name consul_exporter \
    -p ${consul_exporter_port}:${consul_exporter_port} \
