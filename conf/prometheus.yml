@@ -30,6 +30,7 @@ scrape_configs:
   target_groups:
   - targets:
     - 192.168.33.10:9104
+    - 192.168.33.11:9104
 
 - job_name: consul_exporter
   scheme: http

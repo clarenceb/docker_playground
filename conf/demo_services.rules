@@ -2,7 +2,7 @@
 
 # Alert for Review service being unreachable for >30 seconds.
 ALERT ReviewServiceDown
-  IF absent(consul_catalog_service_node_healthy{service="review-service-admin"}) == 1
+  IF absent(sum by (service) (consul_catalog_service_entries_by_node_healthy{service="review-service-admin"}))
   FOR 30s
   WITH {
     severity="page"
@@ -12,7 +12,7 @@ ALERT ReviewServiceDown
 
 # Alert for Review service being unhealthy
 ALERT ReviewServiceUnhealthy
-  IF consul_catalog_service_node_healthy{service="review-service-admin"} == 0
+  IF sum(consul_catalog_service_entries_by_node_healthy{service="review-service-admin"}) <= 2
   FOR 30s
   WITH {
     severity="page"
@@ -22,7 +22,7 @@ ALERT ReviewServiceUnhealthy
 
 # Alert for Catalogue service being unreachable for >30 seconds.
 ALERT CatalogueServiceDown
-  IF absent(consul_catalog_service_node_healthy{service="catalogue-service-admin"}) == 1
+  IF absent(sum by (service) (consul_catalog_service_entries_by_node_healthy{service="catalogue-service-admin"}))
   FOR 30s
   WITH {
     severity="page"
@@ -32,7 +32,7 @@ ALERT CatalogueServiceDown
 
 # Alert for Catalogue service being unhealthy
 ALERT CatalogueServiceUnhealthy
-  IF consul_catalog_service_node_healthy{service="catalogue-service-admin"} == 0
+  IF sum(consul_catalog_service_entries_by_node_healthy{service="catalogue-service-admin"}) <= 2
   FOR 30s
   WITH {
     severity="page"

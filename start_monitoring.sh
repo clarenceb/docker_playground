@@ -6,9 +6,9 @@ basedir=$(readlink -f $(dirname $0))
 source ${basedir}/swarm_scripts/common_env.sh
 
 prometheus_server_port=9090
-prometheus_config_path=${basedir}
+prometheus_config_path="${basedir}/conf"
 prometheus_config_file="prometheus.yml"
-prometheus_rules_path="${basedir}"
+prometheus_rules_path="${basedir}/conf"
 prometheus_rules_file="demo_services.rules"
 alertmanager_config_file="/alertmanager/alertmanager.conf"
 alertmanager_silences_file="/alertmanager/silences.json"
@@ -17,7 +17,7 @@ consul_exporter_port=9107
 alertmanager_port=9093
 prometheus_dash_port=3000
 
-./stop_monitoring.sh
+${basedir}/stop_monitoring.sh
 
 # Start the Prometheus Alert Manager for view/silencing alerts.
 # Restart the container in case it crashes (retry for 10 times),
