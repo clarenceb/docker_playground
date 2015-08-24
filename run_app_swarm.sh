@@ -33,7 +33,7 @@ do
     -e "SERVICE_8083_NAME=review-service-admin" \
     -e "SERVICE_8083_CHECK_HTTP=${healthcheck}" \
     -e "SERVICE_8083_CHECK_INTERVAL=5s" \
-    review:latest
+    clarenceb/review:1.0.0
 done
 
 for i in `seq 1 ${service_count}`;
@@ -56,7 +56,7 @@ do
     -e "SERVICE_8085_NAME=catalogue-service-admin" \
     -e "SERVICE_8085_CHECK_HTTP=${healthcheck}" \
     -e "SERVICE_8085_CHECK_INTERVAL=5s" \
-    catalogue:latest
+    clarenceb/catalogue:1.0.0
 done
 
 echo "Start shop-app"
@@ -70,4 +70,4 @@ ${docker_cmd} run -d \
   -e "SERVICE_8081_CHECK_HTTP=/healthcheck" \
   -e "SERVICE_8081_CHECK_INTERVAL=5s" \
   -e "constraint:node==promserver" \
-  shop-app:latest
+  clarenceb/shop-app:1.0.0

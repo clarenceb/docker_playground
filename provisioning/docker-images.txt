@@ -6,3 +6,6 @@ clarenceb/consul_exporter,0.2.0
 prom/alertmanager,latest
 prom/promdash,latest
 swarm,0.3.0
+clarenceb/shop-app,1.0.0
+clarenceb/review,1.0.0
+clarenceb/catalogue,1.0.0
