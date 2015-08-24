@@ -33,6 +33,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Cache Maven dependencies on host to save time when rebuilding VM.
   create_synced_dir(config, "provisioning/cache/m2/", "/home/vagrant/.m2")
 
+  config.vm.provision "shell",  path: "provisioning/docker-cache-images.sh"
+
   config.vm.define "promserver", primary: true do |server|
     server.vm.hostname = "promserver"
 
