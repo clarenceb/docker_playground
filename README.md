@@ -14,7 +14,7 @@ Steps to get app and services running in a Docker Swarm cluster:
 
 Spin up the 2 VMs (promserver and server02)
 
-    vagrant up
+    vagrant up --provision
 
 Configure a Docker Swarm cluster using the 2 VMs
 
@@ -112,8 +112,19 @@ View healthcheck for the shop-app:
     # On promserver
     curl http://192.168.33.10:8081/healthcheck?pretty=true
 
-**Note**: If you stop all instances of either review or catalogue service then the shop-app will report that it is unhealthy.
+**Alarm behaviour**
 
+Review Service:
+  * If you stop review service instances such that there are 2 or less left then the review service will report as unhealthy.
+  * If you stop all review instances then the review service will report as down.
+
+Catalogue Service:
+  * If you stop catalogue instances such that there are 2 or less left then the catalogue service will report as unhealthy.
+  * If you stop all catalogue instances then the catalogue service will report as down.
+
+Shop Application:
+  * If you stop all instances of either review and/or catalogue service then the shop-app will report that it is unhealthy (since its healthcheck incorporates finding a healthy review and catalogue service instance)
+  * If you stop the shop-app instance then it will report as down.
 
 Resources:
 ----------
@@ -125,3 +136,4 @@ Resources:
 * [Registrator](https://github.com/gliderlabs/registrator)
 * [Consul](https://www.consul.io/)
 * [consul_exporter](https://github.com/prometheus/consul_exporter)
+* [Incoming Webhooks: Send data into Slack in real-time](https://api.slack.com/incoming-webhooks)

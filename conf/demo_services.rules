@@ -1,61 +1,61 @@
 ### demo_services.rules ###
 
 # Alert for Review service being unreachable for >30 seconds.
-ALERT ReviewServiceDown
-  IF absent(sum by (service) (consul_catalog_service_entries_by_node_healthy{service="review-service-admin"}))
+ALERT ReviewServiceIsDown
+  IF absent(max_over_time(consul_catalog_service_entries_by_node_healthy{service="review-service-admin"}[30s])) == 1
   FOR 30s
   WITH {
     severity="page"
   }
-  SUMMARY "Review service {{$labels.instance}} down"
-  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been down for more than 30 seconds."
+  SUMMARY "Review service is down"
+  DESCRIPTION "All instances of review service have been down for more than 30 seconds."
 
-# Alert for Review service being unhealthy
-ALERT ReviewServiceUnhealthy
-  IF sum(consul_catalog_service_entries_by_node_healthy{service="review-service-admin"}) <= 2
+# Alert for Review service healthy count dropping below acceptable threshold for >30 seconds.
+ALERT ReviewServiceHealthWarning
+  IF sum by (service) (max_over_time(consul_catalog_service_entries_by_node_healthy{service="review-service-admin"}[30s])) <= 2
   FOR 30s
   WITH {
-    severity="page"
+    severity="warning"
   }
-  SUMMARY "Review service {{$labels.instance}} unhealthy"
-  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been unhealthy for more than 30 seconds."
+  SUMMARY "Review service becoming unhealthy"
+  DESCRIPTION "Only {{$value}} healthy review instances available for more than 30 seconds."
 
 # Alert for Catalogue service being unreachable for >30 seconds.
-ALERT CatalogueServiceDown
-  IF absent(sum by (service) (consul_catalog_service_entries_by_node_healthy{service="catalogue-service-admin"}))
+ALERT CatalogueServiceIsDown
+  IF absent(max_over_time(consul_catalog_service_entries_by_node_healthy{service="catalogue-service-admin"}[30s])) == 1
   FOR 30s
   WITH {
     severity="page"
   }
-  SUMMARY "Catalogue service {{$labels.instance}} down"
-  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been down for more than 30 seconds."
+  SUMMARY "Catalogue service is down"
+  DESCRIPTION "All instances of catalogue service have been down for more than 30 seconds."
 
-# Alert for Catalogue service being unhealthy
-ALERT CatalogueServiceUnhealthy
-  IF sum(consul_catalog_service_entries_by_node_healthy{service="catalogue-service-admin"}) <= 2
+# Alert for Catalogue service healthy count dropping below acceptable threshold for >30 seconds.
+ALERT CatalogueServiceHealthWarning
+  IF sum by (service) (max_over_time(consul_catalog_service_entries_by_node_healthy{service="catalogue-service-admin"}[30s])) <= 2
   FOR 30s
   WITH {
-    severity="page"
+    severity="warning"
   }
-  SUMMARY "Catalogue service {{$labels.instance}} unhealthy"
-  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been unhealthy for more than 30 seconds."
+  SUMMARY "Catalogue service becoming unhealthy"
+  DESCRIPTION "Only {{$value}} healthy catalogue instances available for more than 30 seconds."
 
 # Alert for Shop app being unreachable for >30 seconds.
-ALERT ShopAppDown
-  IF absent(consul_catalog_service_node_healthy{service="shop-application-admin"}) == 1
+ALERT ShopAppIsDown
+  IF absent(max_over_time(consul_catalog_service_entries_by_node_healthy{service="shop-application-admin"}[30s])) == 1
   FOR 30s
   WITH {
     severity="page"
   }
-  SUMMARY "Shop app {{$labels.instance}} down"
-  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been down for more than 30 seconds."
+  SUMMARY "Shop app is down"
+  DESCRIPTION "All instances of shop app have been down for more than 30 seconds."
 
-# Alert for Shop app being unhealthy
-ALERT ShopAppUnhealthy
-  IF consul_catalog_service_node_healthy{service="shop-application-admin"} == 0
+# Alert for Shop app healthy count dropping below acceptable threshold for >30 seconds.
+ALERT ShopAppIsUnhealthy
+  IF sum by (service) (max_over_time(consul_catalog_service_entries_by_node_healthy{service="shop-application-admin"}[30s])) == 0
   FOR 30s
   WITH {
     severity="page"
   }
-  SUMMARY "Shop app {{$labels.instance}} unhealthy"
-  DESCRIPTION "{{$labels.instance}} of job {{$labels.job}} has been unhealthy for more than 30 seconds."
+  SUMMARY "Shop app is unhealthy"
+  DESCRIPTION "Shop app on {{$labels.instance}} has been unhealthy for more than 30 seconds."
