@@ -58,4 +58,4 @@ ALERT ShopAppIsUnhealthy
     severity="page"
   }
   SUMMARY "Shop app is unhealthy"
-  DESCRIPTION "Shop app on {{$labels.instance}} has been unhealthy for more than 30 seconds."
+  DESCRIPTION "Shop app has been unhealthy for more than 30 seconds."
