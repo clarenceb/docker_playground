@@ -4,5 +4,5 @@
 /review
 /shop-app
 /backup
-
+/conf/alertmanager.conf.secret
 
