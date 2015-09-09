@@ -126,8 +126,8 @@ Shop Application:
   * If you stop all instances of either review and/or catalogue service then the shop-app will report that it is unhealthy (since its healthcheck incorporates finding a healthy review and catalogue service instance)
   * If you stop the shop-app instance then it will report as down.
 
-Resources:
-----------
+Further Learning:
+-----------------
 * [Monitoring Docker services with Prometheus](https://labs.ctl.io/monitoring-docker-services-with-prometheus/)
 * [Prometheus Documentation](http://prometheus.io/docs/introduction/overview/)
 * [PromDash](http://prometheus.io/docs/visualization/promdash/)
@@ -137,3 +137,4 @@ Resources:
 * [Consul](https://www.consul.io/)
 * [consul_exporter](https://github.com/prometheus/consul_exporter)
 * [Incoming Webhooks: Send data into Slack in real-time](https://api.slack.com/incoming-webhooks)
+* [Alertmanager - Alert Inhibiting Rules](https://github.com/prometheus/alertmanager/blob/master/config/config.proto#L164)
