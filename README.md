@@ -9,6 +9,8 @@ This demo uses a Docker-based app and services.  The app + services use a combin
 
 [Prometheus](http://prometheus.io/) is used to monitor the containers via health metrics exported from [consul_exporter](https://github.com/prometheus/consul_exporter).
 
+For more detail information, see my [Evernote article](https://www.evernote.com/l/ABvXhxdi6-ZJxY6jO5eWccZSbUncDDCDhRI).
+
 Steps to get app and services running in a Docker Swarm cluster:
 ----------------------------------------------------------------
 
