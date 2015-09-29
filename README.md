@@ -1,7 +1,9 @@
-Introduction to Prometheus for monitoring container-based applications and services
-===================================================================================
+Docker Playground
+=================
 
-Presentation material for [Infracoders September Meetup](http://www.meetup.com/Infrastructure-Coders/events/224551202/).
+This is a playground for testing out ideas using Docker.
+
+*Note:* Based on repo [https://github.com/clarenceb/prometheus_intro](https://github.com/clarenceb/prometheus_intro)
 
 *Note*: Source code for shop-app, catalogue, review services not provided yet.
 
